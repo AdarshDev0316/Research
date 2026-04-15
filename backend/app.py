@@ -16,6 +16,12 @@ CORS(app)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 50 * 1024 * 1024  # 50 MB max
 
+# Ensure database tables exist (critical for Gunicorn deployments)
+try:
+    init_db()
+except Exception as e:
+    print(f"Warning: Failed to initialize DB: {e}")
+
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
